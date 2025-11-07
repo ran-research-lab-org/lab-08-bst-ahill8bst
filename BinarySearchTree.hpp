@@ -144,7 +144,7 @@ public:
         u = Q.front();
         level = u.second;
         Q.pop();
-        if (activeLevel!=level)   // if level increases, begin new sub-array in string
+        if (activeLevel!=level)   // if level increases, begin new sub-array representation in string
         {
             activeLevel += 1;
             st += "],[" + to_string(u.first->element);

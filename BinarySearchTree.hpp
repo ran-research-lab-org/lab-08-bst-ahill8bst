@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <queue>
 using namespace std;
 
 template <typename T> string toStr(const T &value) {
@@ -111,10 +112,73 @@ public:
   // Remove x from the tree. Nothing is done if x is not found.
   void remove(const Comparable &x) { remove(x, root); }
 
+  // void BFT() const {
+  //   string st;
+  //   queue<BinaryNode* > Q;
+  //   Q.push(root);
+  //   while (!Q.empty())
+  //   {
+  //     BinaryNode* u;
+  //     u = Q.front(), Q.pop();
+  //     cout << u->key << endl;
+  //     if (u->left != nullptr){Q.push(u->left);};
+  //     if (u->right != nullptr){Q.push(u->right);};
+  //   }
+  // }
+
+
   string BFT() const {
-    string st;
+    string st;  // variable to store BST in order of levels
+    queue<pair<BinaryNode*, int>> Q;  
+    vector<BinaryNode*> v;
+    int level=0;  // variable storing level of node
+    int activeLevel = 0;  // variable used to detect if level has increased
+    if (root != nullptr)
+    {
+      st = "[[";
+      Q.push({root,level});
+      while (!Q.empty())
+      {
+        // BinaryNode* u = Q.front();
+        pair<BinaryNode*, int> u;
+        u = Q.front();
+        level = u.second;
+        Q.pop();
+        if (activeLevel!=level)   // if level increases, begin new sub-array representation in string
+        {
+            activeLevel += 1;
+            st += "],[" + to_string(u.first->element);
+        }
+        else
+        {
+            if (level == 0) // Condition only applicable to root node; guarantees no ',' before and after insertion
+            {
+              st += to_string(u.first->element);
+            }
+            else
+            {
+              st += ",";
+              st += to_string(u.first->element);
+            }
+        }
+        if (u.first->left != nullptr)
+        {
+          Q.push({u.first->left, level+1});
+        }
+        if (u.first->right != nullptr)
+        {
+          Q.push({u.first->right, level+1});
+        }
+      }
+      st += "]]";
+    }
+    else
+    {
+      return st;
+    }
     return st;
   }
+  
 
 private:
   struct BinaryNode {
@@ -130,7 +194,6 @@ private:
   };
 
   BinaryNode *root;
-
   /**
    * Internal method to insert into a subtree.
    * x is the item to insert.
@@ -145,7 +208,7 @@ private:
     else if (t->element < x)
       insert(x, t->right);
     else
-      ; // Duplicate; do nothing
+      cout << "Duplicate; do nothing" << endl; // Duplicate; do nothing
   }
 
   /**
@@ -162,7 +225,7 @@ private:
     else if (t->element < x)
       insert(std::move(x), t->right);
     else
-      ; // Duplicate; do nothing
+      cout << "Duplicate; do nothing" << endl; // Duplicate; do nothing
   }
 
   /**
@@ -277,6 +340,7 @@ private:
     else
       return new BinaryNode{t->element, clone(t->left), clone(t->right)};
   }
+
 };
 
 #endif

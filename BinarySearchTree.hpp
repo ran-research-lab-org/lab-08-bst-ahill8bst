@@ -128,40 +128,54 @@ public:
 
 
   string BFT() const {
-    string st = "[[";
-    queue<pair<BinaryNode*, int>> Q;
+    string st;  // variable to store BST in order of levels
+    queue<pair<BinaryNode*, int>> Q;  
     vector<BinaryNode*> v;
-    int level=0;
-    int count = 0;
-    Q.push({root,level});
-    while (!Q.empty())
+    int level=0;  // variable storing level of node
+    int activeLevel = 0;  // variable used to detect if level has increased
+    if (root != nullptr)
     {
-      // BinaryNode* u = Q.front();
-      pair<BinaryNode*, int> u;
-      u = Q.front();
-      level = u.second;
-      Q.pop();
-      if (count!=level)
+      st = "[[";
+      Q.push({root,level});
+      while (!Q.empty())
       {
-          count += 1;
-          st = strle
-          st += "],[";
+        // BinaryNode* u = Q.front();
+        pair<BinaryNode*, int> u;
+        u = Q.front();
+        level = u.second;
+        Q.pop();
+        if (activeLevel!=level)   // if level increases, begin new sub-array in string
+        {
+            activeLevel += 1;
+            st += "],[" + to_string(u.first->element);
+        }
+        else
+        {
+            if (level == 0) // Condition only applicable to root node; guarantees no ',' before and after insertion
+            {
+              st += to_string(u.first->element);
+            }
+            else
+            {
+              st += ",";
+              st += to_string(u.first->element);
+            }
+        }
+        if (u.first->left != nullptr)
+        {
+          Q.push({u.first->left, level+1});
+        }
+        if (u.first->right != nullptr)
+        {
+          Q.push({u.first->right, level+1});
+        }
       }
-      st += to_string(u.first->element);
-      
-      
-      cout << "Level: " << u.second << endl;
-
-      if (u.first->left != nullptr)
-      {
-        Q.push({u.first->left, level+1});
-      }
-      if (u.first->right != nullptr)
-      {
-        Q.push({u.first->right, level+1});
-      }
+      st += "]]";
     }
-    st += "]";
+    else
+    {
+      return st;
+    }
     return st;
   }
   

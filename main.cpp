@@ -34,11 +34,38 @@ TEST_CASE("BinarySearchTree basic operations") {
   }
 
   CHECK(C.toInorderStr() == "2,3,4,6,7,8,10,12,14,15,16,18,20,22,24,26,28,30");
-  //CHECK(C.BFT() == "[[16],[8,24],[4,12,20,28],[2,6,10,14,18,22,26,30],[3,7,15]]");
+  CHECK(C.BFT() == "[[16],[8,24],[4,12,20,28],[2,6,10,14,18,22,26,30],[3,7,15]]");
   BinarySearchTree<int> D;
-  for (auto e: {8,3,10,1,6,14,4,7,13})
-  {
-    D.insert(e);
+  for (auto e: {8,3,10,1,6,14,4,7,13}){D.insert(e);
   }
   CHECK(D.BFT() == "[[8],[3,10],[1,6,14],[4,7,13]]");
+
+  BinarySearchTree<int> E;  // Testing output when root is nullptr
+  CHECK(E.BFT()=="");
+
+  BinarySearchTree<int> F;  // Testing output with just root node
+  F.insert(0);
+  CHECK(F.BFT()=="[[0]]");
+
+  BinarySearchTree<int> G;  // Testing output with elements to the right of root
+  G.insert(0);
+  G.insert(1);
+  G.insert(2);
+  G.insert(3);
+  G.insert(4);
+
+  CHECK(G.BFT()== "[[0],[1],[2],[3],[4]]");
+
+  BinarySearchTree<int> H;  // Testing output with elements to the left of root
+  H.insert(4);
+  H.insert(3);
+  H.insert(2);
+  H.insert(1);
+  H.insert(0);
+
+  CHECK(H.BFT()== "[[4],[3],[2],[1],[0]]");
+
+
+
+
 }
